@@ -1,13 +1,13 @@
 import React, {forwardRef, useImperativeHandle, useRef, useState} from "react";
 import "./ProgressArea.scss";
-import music1 from "../../music/music-1.mp3";
-import {useDispatch} from "react-redux";
-import {playMusic, stopMusic} from "../../store/musicPlayerReducer";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import {nextMusic, playMusic, stopMusic} from "../../store/musicPlayerReducer";
 
 function ProgressArea(props, ref) {
     const audio = useRef();
     const progressBar = useRef();
     const dispatch = useDispatch();
+    const {playList, currentIndex} =  useSelector(state => ({playList:state.playList, currentIndex:state.currentIndex}), shallowEqual)
     const [currentTime, setcurrentTime] = useState("00:00");
     const [duration, setduration] = useState("00:00");
     useImperativeHandle(ref, () => ({
@@ -16,6 +16,9 @@ function ProgressArea(props, ref) {
         },
         pause:() =>{
             audio.current.pause()
+        },
+        changeVolume:(volume) => {
+            audio.current.volume = volume;
         }
     }));
 
@@ -49,16 +52,20 @@ function ProgressArea(props, ref) {
         setcurrentTime(getTime(currentTime));
         setduration(getTime(duration));
     }
+    const onEened = () => {
+        dispatch(nextMusic());
+    }
   return (
     <div className="progress-area" onMouseDown={onClickProgress}>
       <div className="progress-bar" ref={progressBar}>
         <audio
           autoPlay
-          ref={audio}
-          src={music1}
+          onEnded={onEened}
           onPlay={onPlay}
-          onPause={onPause}
           onTimeUpdate={onTimeUpdate}
+          onPause={onPause}
+          src={playList[currentIndex].src}
+          ref={audio}
         ></audio>
       </div>
       <div className="music-timer">
