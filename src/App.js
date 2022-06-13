@@ -17,6 +17,9 @@ function App() {
     const changeVolume = (volume) =>{
         audioRef.current.changeVolume(volume);
     }
+    const resetDuration = () => {
+        audioRef.current.resetDuration();
+    }
 
   return (
     <div className="App">
@@ -27,6 +30,7 @@ function App() {
             play={onPlay}
             pause={onPause}
             changeVolume={changeVolume}
+            resetDuration={resetDuration}
         />
         <PlayList />
       </div>
