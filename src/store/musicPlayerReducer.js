@@ -93,7 +93,8 @@ export default function  musicPlayerReducer(state = initialState, action) {
             return {
                 ...state,
                 currentIndex:nextIndex,
-                currentMusicId:state.playList[nextIndex]
+                currentMusicId:state.playList[nextIndex],
+                playing:true
             };
         case PREV_MUSIC:
             const prevIndex = state.repeat === 'SHUFFLE' ?
@@ -102,7 +103,8 @@ export default function  musicPlayerReducer(state = initialState, action) {
             return {
                 ...state,
                 currentIndex: prevIndex,
-                currentMusicId: state.playList[prevIndex]
+                currentMusicId: state.playList[prevIndex],
+                playing:true
             };
         case SET_REPEAT:
             return {
